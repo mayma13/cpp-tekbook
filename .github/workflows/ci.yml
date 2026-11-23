@@ -17,11 +17,27 @@ jobs:
           cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
           cmake --build build -j2
           ls -lh build/tekbook_app build/run_tests
+      - name: Publier les binaires
+        uses: actions/upload-artifact@v7
+        with:
+          name: tekbook-binaires
+          path: |
+            build/tekbook_app
+            build/run_tests
+          retention-days: 7
+          if-no-files-found: error
 
   unit-tests:
     runs-on: ubuntu-24.04
     needs: compile
     steps:
       - uses: actions/checkout@v6
+      - name: Télécharger les binaires
+        uses: actions/download-artifact@v8
+        with:
+          name: tekbook-binaires
+          path: build
       - name: Lancer les tests
-        run: ./build/run_tests
+        run: |
+          chmod +x build/run_tests
+          ./build/run_tests
