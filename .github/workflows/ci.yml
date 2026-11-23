@@ -11,15 +11,15 @@ jobs:
   compile:
     runs-on: ubuntu-24.04
     env:
-      CCACHE_DIR: \${{ github.workspace }}/.ccache
-      CCACHE_BASEDIR: \${{ github.workspace }}
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+      CCACHE_BASEDIR: ${{ github.workspace }}
     steps:
       - uses: actions/checkout@v6
       - name: Restaurer le cache ccache
         uses: actions/cache@v6
         with:
           path: .ccache
-          key: ccache-ubuntu24-\${{ runner.arch }}-\${{ hashFiles('CMakeLists.txt') }}
+          key: ccache-ubuntu24-${{ runner.arch }}-${{ hashFiles('CMakeLists.txt') }}
       - name: Installer ccache si nécessaire
         run: |
           if ! command -v ccache >/dev/null; then
